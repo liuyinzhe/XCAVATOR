@@ -5,6 +5,7 @@ use Pod::Usage;
 use Getopt::Long;
 use strict;
 use File::Path;
+use Cwd qw(getcwd);
 use Cwd 'abs_path';
 use File::Basename;
 
@@ -33,10 +34,10 @@ $Target_Name = "supercazzola";
 my ($myscript,$workingfolder);
 
 $myscript = abs_path($0);
-$workingfolder = dirname($myscript);
+$workingfolder = dirname $myscript;
 
 
-$Program_Folder_Path="$workingfolder";
+$Program_Folder_Path=dirname $myscript;
 
 
 ######################################################################
@@ -51,7 +52,7 @@ $help and pod2usage (-verbose=>1, -exitval=>1, -output=>\*STDOUT);
 $man and pod2usage (-verbose=>2, -exitval=>1, -output=>\*STDOUT);
 @ARGV == 1 or pod2usage ("Syntax error: the number of arguments found at command line is incorrect.");
 
-$Input_File_Path=$ARGV[0];
+$Input_File_Path=abs_path($ARGV[0]);
 
 
 
