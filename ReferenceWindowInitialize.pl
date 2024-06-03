@@ -4,6 +4,7 @@ use warnings;
 use Pod::Usage;
 use Getopt::Long;
 use strict;
+use Cwd qw(getcwd);
 use Cwd 'abs_path';
 use File::Path;
 use File::Basename;
