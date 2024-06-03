@@ -48,13 +48,13 @@ $man and pod2usage (-verbose=>2, -exitval=>1, -output=>\*STDOUT);
 my ($myscriptname,$myscript,$workingfolder);
 
 $myscript = abs_path($0);
-$workingfolder = dirname($myscript);
+$workingfolder = getcwd();
 
-$Program_Folder_Path="$workingfolder";
+$Program_Folder_Path=dirname $myscript;
 
 print "Program folder is: $Program_Folder_Path\n";
 
-$Source_Data=$ARGV[0];
+$Source_Data=abs_path($ARGV[0]);
 $Target_Name=$ARGV[1];
 $Window=$ARGV[2];
 $Assembly=$ARGV[3];
@@ -73,13 +73,13 @@ $Target_Filt_Path="$Program_Folder_Path/data/targets/$Assembly/$Target_Name";
 
 my $range=99999;
 my $ID=int(rand($range));
-my $filename="source.$ID";
+my $filename="$workingfolder/source.$ID";
 
 if(-e $filename){ 
 	$ID=$ID+100000;
 }
 
-system qq(awk NF $Source_Data > source.$ID);
+system qq(awk NF $Source_Data > $workingfolder/source.$ID);
 
 ######################################################################
 #
@@ -87,7 +87,7 @@ system qq(awk NF $Source_Data > source.$ID);
 #
 ######################################################################
 
-open(CHECKBOOK,"source.$ID") || die "Couldn't open the source file!";
+open(CHECKBOOK,"$workingfolder/source.$ID") || die "Couldn't open the $workingfolder/source file!";
 
 while($record=<CHECKBOOK>){
 	chomp($record);
@@ -116,7 +116,7 @@ print "...done!\n";
 
 
 close(CHECKBOOK);
-@unlinkfiles=("source.$ID");
+@unlinkfiles=("$workingfolder/source.$ID");
 unlink @unlinkfiles;
 
 ######################################################################
