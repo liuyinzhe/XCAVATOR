@@ -5,6 +5,7 @@ use Pod::Usage;
 use Getopt::Long;
 use strict;
 use File::Path;
+use Cwd qw(getcwd);
 use Cwd 'abs_path';
 use File::Basename;
 #use Forks::Super;
@@ -39,13 +40,13 @@ $man and pod2usage (-verbose=>2, -exitval=>1, -output=>\*STDOUT);
 my ($myscript,$workingfolder);
 
 $myscript = abs_path($0);
-$workingfolder = dirname($myscript);
+$workingfolder = getcwd();
 
 
-$Program_Folder_Path="$workingfolder";
+$Program_Folder_Path=dirname $myscript;
 
 
-$Input_File_Path=$ARGV[0];
+$Input_File_Path=abs_path($ARGV[0]);
 
 my $range=99999;
 my $ID=int(rand($range));
@@ -53,7 +54,7 @@ my $labeltemp=".tmp.$ID";
 
 
 ### Creating Temporary Folder for MultiProcessor analysis ###
-my $Temp_Folder="$Program_Folder_Path/$labeltemp";
+my $Temp_Folder="$workingfolder/$labeltemp";
 mkpath ("$Temp_Folder");
 
 
@@ -71,7 +72,7 @@ print "Program folder is: $Program_Folder_Path\n";
 
 
   print "Preparing Multiprocessor Analysis...\n";
-  system qq(R --slave --args $Program_Folder_Path,$Input_File_Path,$labeltemp,$target,$assembly,$processors,$mode < $Program_Folder_Path/lib/R/DataPrepareParallel.R);
+  system qq(R --slave --args $workingfolder,$Input_File_Path,$labeltemp,$target,$assembly,$processors,$mode,$Program_Folder_Path < $Program_Folder_Path/lib/R/DataPrepareParallel.R);
   print "Starting Multiprocessor Analysis!\n";
 
 open(CHECKBOOK,"$Input_File_Parallel") || die "Couldn't open the input file $Input_File_Parallel.";
