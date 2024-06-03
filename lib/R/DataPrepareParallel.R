@@ -4,16 +4,17 @@ split.vars <- unlist(strsplit(vars,","))
 
 
 ###  Setting input paths for normalized read count and experimental design ###
-ProgramFolder <- split.vars[1]
+WorkingFolder <- split.vars[1]
 ExperimentalFile <- split.vars[2]
 labeltmp <- split.vars[3]
 TargetName <- split.vars[4]
 Assembly <- split.vars[5]
 Processors <- as.numeric(split.vars[6])
 mode <- split.vars[7]
+ProgramFolder <- split.vars[8]
 
 
-PathOut<-file.path(ProgramFolder,labeltmp)
+PathOut<-file.path(WorkingFolder,labeltmp)
 ExperimentalFileSplit<-unlist(strsplit(ExperimentalFile,"/"))
 ExperimentalFileLabel<-ExperimentalFileSplit[length(ExperimentalFileSplit)]
 SettingLabel<-paste(" --assembly ",Assembly," --mode ",mode," --target ",TargetName,sep="")
